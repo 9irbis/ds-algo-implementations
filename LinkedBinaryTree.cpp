@@ -1,4 +1,4 @@
-// A complete binary tree implementation using a linked structure
+// A full(proper) binary tree implementation using a linked structure
 
 #include <iostream>
 #include <list>
