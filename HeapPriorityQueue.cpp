@@ -77,6 +77,8 @@ const E& HeapPriorityQueue<E,C>::min() throw(QueueEmpty)
     return *(T.root());
 }
 
+// insert the new element at last node and keep swapping upwards until heap
+// order property is satisfied
 template <typename E, typename C>
 void HeapPriorityQueue<E,C>::insert(const E& e)
 {
@@ -92,6 +94,8 @@ void HeapPriorityQueue<E,C>::insert(const E& e)
     }
 }
 
+//swap the root and last element, remove the last element and keep swapping the
+//new root downwards until heap order property is satisfied.
 template <typename E, typename C>
 void HeapPriorityQueue<E,C>::removeMin() throw(QueueEmpty)
 {
@@ -120,6 +124,7 @@ void HeapPriorityQueue<E,C>::removeMin() throw(QueueEmpty)
     }
 }
 
+// class representing a point in a 2d plane
 struct Point2D{
     double x;
     double y;
@@ -129,6 +134,7 @@ struct Point2D{
     double getY() const {return y;}
 };
 
+// comparator class to arrange points vertically upwards
 class BottomUp{
 public:
     bool operator()(const Point2D& a, const Point2D& b)
