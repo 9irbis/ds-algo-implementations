@@ -203,6 +203,47 @@ void HashMap<K,V,H>::erase(const K& k) throw(InvalidKeyException)
     eraser(p);
 }
 
+template <typename K, typename V, typename H>
+class HashDict : public HashMap<K,V,H>{
+public:
+    typedef typename HashMap<K,V,H>::Iterator Iterator;
+    typedef typename HashMap<K,V,H>::Entry Entry;
+    class Range{
+    private:
+        Iterator _begin;
+        Iterator _end;
+    public:
+        Range(const Iterator& b, const Iterator& e) : _begin(b), _end(e) {}
+        Iterator& begin() {return _begin;}
+        Iterator& end() {return _end;}
+    };
+
+public:
+    HashDict(int capacity = 101);
+    Iterator insert(const K& k, const V& v);
+    Range findAll(const K& k);
+};
+
+template <typename K, typename V, typename H>
+HashDict<K,V,H>::HashDict(int capacity) : HashMap<K,V,H>(capacity) {}  
+
+template <typename K, typename V, typename H>
+typename HashDict<K,V,H>::Iterator HashDict<K,V,H>::insert(const K& k, const V& v)
+{ 
+    Iterator p = this->finder(k);
+    Iterator q = this->inserter(p, Entry(k, v));
+    return q;
+}
+
+template <typename K, typename V, typename H>
+typename HashDict<K,V,H>::Range HashDict<K,V,H>::findAll(const K& k)
+{
+    Iterator b = this->finder(k);
+    Iterator p = b;
+    while (!this->endOfBkt(p) && (*p).key() == k)
+        ++p;
+    return Range(b, p);
+}
 class HashFunc{
 public:
     int operator()(int val)
@@ -233,5 +274,15 @@ int main()
     cout << m.size() << endl;
     auto p = m.begin();
     cout << (*p).key() << " " << (*p).value() << endl;
+    cout << "--------------------------Dictionary Testing----------------------------\n";
+    HashDict<int, string, HashFunc> d;
+    cout << d.size() << endl;
+    if (d.empty())
+        cout << "Dictionary is empty!\n";
+    d.insert(3, "Roman");
+    d.insert(3, "Mike");
+    auto range = d.findAll(3);
+    for (auto p = d.begin(); p != d.end(); ++p)
+        cout << (*p).key() << " : " << (*p) .value() << endl;
     return 0;
 }
